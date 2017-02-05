@@ -17,10 +17,8 @@ import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 
 public class Query2 {
 	public static class Q2Mapper extends Mapper<Object, Text, Text, Text> {
-
 		private Text cusID = new Text();
 		private Text record = new Text();
-
 		public void map(Object key, Text value, Context context) throws IOException, InterruptedException {
 			StringTokenizer itr = new StringTokenizer(value.toString());
 			while (itr.hasMoreTokens()) {
@@ -34,7 +32,6 @@ public class Query2 {
 
 	public static class Q2Combiner extends Reducer<Text, Text, Text, Text> {
 		private Text result = new Text();
-
 		public void reduce(Text key, Text value, Context context) throws IOException, InterruptedException {
 			float total = 0;
 			int count = 0;
@@ -48,7 +45,6 @@ public class Query2 {
 
 	public static class Q2Reducer extends Reducer<Text, Text, Text, Text> {
 		private Text result = new Text();
-
 		public void reduce(Text key, Iterable<Text> values, Context context) throws IOException, InterruptedException {
 			float total = 0;
 			int count = 0;
