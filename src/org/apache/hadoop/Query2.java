@@ -3,10 +3,9 @@ package org.apache.hadoop;
 import java.io.IOException;
 import java.util.StringTokenizer;
 
-import org.apache.hadoop.Query1.IntSumReducer;
-import org.apache.hadoop.Query1.TokenizerMapper;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.Path;
+import org.apache.hadoop.io.FloatWritable;
 import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Job;
@@ -17,33 +16,49 @@ import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 
 public class Query2 {
-	public static class TokenizerMapper extends Mapper<Object, Text, Text, IntWritable> {
+	public static class Q2Mapper extends Mapper<Object, Text, Text, Text> {
 
-		private final static IntWritable one = new IntWritable(1);
-		private Text word = new Text();
+		private Text cusID = new Text();
+		private Text record = new Text();
 
 		public void map(Object key, Text value, Context context) throws IOException, InterruptedException {
 			StringTokenizer itr = new StringTokenizer(value.toString());
 			while (itr.hasMoreTokens()) {
-				String[] s = itr.nextToken().split(",");				
-				word.set(s[1]+","+s[2]+","+s[3]);				
-				context.write(word, one);
+				String[] s = itr.nextToken().split(",");
+				cusID.set(s[1]);
+				record.set(s[2] + ",1");
+				context.write(cusID, record);
 			}
 		}
 	}
 
+	public static class Q2Combiner extends Reducer<Text, Text, Text, Text> {
+		private Text result = new Text();
 
-	public static class IntSumReducer extends Reducer<Text, IntWritable, Text, IntWritable> {
-		private IntWritable result = new IntWritable();
+		public void reduce(Text key, Text value, Context context) throws IOException, InterruptedException {
+			float total = 0;
+			int count = 0;
+			String[] s = value.toString().split(",");
+			total += Float.parseFloat(s[0]);
+			count += Integer.parseInt(s[1]);
+			result.set(total + "," + count);
+			context.write(key, result);
+		}
+	}
 
-		public void reduce(Text key, Iterable<IntWritable> values, Context context)
-				throws IOException, InterruptedException {
-/*			int sum = 0;
-			for (IntWritable val : values) {
-				sum += val.get();
+	public static class Q2Reducer extends Reducer<Text, Text, Text, Text> {
+		private Text result = new Text();
+
+		public void reduce(Text key, Iterable<Text> values, Context context) throws IOException, InterruptedException {
+			float total = 0;
+			int count = 0;
+			String[] s = null;
+			for (Text val : values) {
+				s = val.toString().split(",");
+				total += Float.parseFloat(s[0]);
+				count += Integer.parseInt(s[1]);
 			}
-			result.set(sum);*/
-			String[] s = key.toString().split(",");
+			result.set(total + "," + count);
 			context.write(key, result);
 		}
 	}
@@ -55,13 +70,13 @@ public class Query2 {
 			System.exit(2);
 		}
 		Job job = new Job(conf, "Query-2");
-		job.setJarByClass(Query1.class);
-		job.setMapperClass(TokenizerMapper.class);
-		job.setCombinerClass(IntSumReducer.class);
-		job.setReducerClass(IntSumReducer.class);
+		job.setJarByClass(Query2.class);
+		job.setMapperClass(Q2Mapper.class);
+		job.setCombinerClass(Q2Combiner.class);
+		job.setReducerClass(Q2Reducer.class);
 		job.setOutputKeyClass(Text.class);
 		job.setNumReduceTasks(2);
-		job.setOutputValueClass(IntWritable.class);
+		job.setOutputValueClass(Text.class);
 		FileInputFormat.addInputPath(job, new Path(args[0]));
 		FileOutputFormat.setOutputPath(job, new Path(args[1]));
 		System.exit(job.waitForCompletion(true) ? 0 : 1);

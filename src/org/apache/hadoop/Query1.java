@@ -15,7 +15,7 @@ import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 import org.apache.hadoop.util.GenericOptionsParser;
 
 public class Query1 {
-	public static class TokenizerMapper extends Mapper<Object, Text, Text, IntWritable> {
+	public static class Q1Mapper extends Mapper<Object, Text, Text, IntWritable> {
 
 		private final static IntWritable one = new IntWritable(1);
 		private Text word = new Text();
@@ -32,7 +32,7 @@ public class Query1 {
 		}
 	}
 
-	public static class IntSumReducer extends Reducer<Text, IntWritable, Text, IntWritable> {
+	public static class Q1Reducer extends Reducer<Text, IntWritable, Text, IntWritable> {
 		private IntWritable result = new IntWritable();
 
 		public void reduce(Text key, Iterable<IntWritable> values, Context context)
@@ -54,9 +54,9 @@ public class Query1 {
 		}
 		Job job = new Job(conf, "Query-1");
 		job.setJarByClass(Query1.class);
-		job.setMapperClass(TokenizerMapper.class);
-//		job.setCombinerClass(IntSumReducer.class);
-//		job.setReducerClass(IntSumReducer.class);
+		job.setMapperClass(Q1Mapper.class);
+//		job.setCombinerClass(Q2Reducer.class);
+//		job.setReducerClass(Q2Reducer.class);
 		job.setOutputKeyClass(Text.class);
 		job.setNumReduceTasks(2);
 		job.setOutputValueClass(IntWritable.class);
