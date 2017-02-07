@@ -1,0 +1,9 @@
+Remove command: hadoop dfs -rmr output
+
+Copy command: hadoop dfs -copyFromLocal /home/hadoop/input dft
+
+Query1: hadoop jar ./P1.jar org.apache.hadoop.Query1 /user/hadoop/dft /user/hadoop/output
+Query2: hadoop jar ./P1.jar org.apache.hadoop.Query2 /user/hadoop/dft /user/hadoop/output
+Query3: hadoop jar ./P1.jar org.apache.hadoop.Query3Driver /user/hadoop/dft /user/hadoop/output /user/hadoop/cache/customer.csv
+Query4: hadoop jar ./P1.jar org.apache.hadoop.Query4Driver /user/hadoop/dft /user/hadoop/output /user/hadoop/cache/customer.csv
+Query5: hadoop jar ./P1.jar org.apache.hadoop.Query5Driver /user/hadoop/dft /user/hadoop/output /user/hadoop/cache/customer.csv
