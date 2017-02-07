@@ -31,6 +31,7 @@ public class Query2 {
 			}
 		}
 	}
+	
 
 	public static class Q2Combiner extends Reducer<Text, Text, Text, Text> {
 		private Text result = new Text();
