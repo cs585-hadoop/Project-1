@@ -55,8 +55,5 @@ public class Query4Mapper extends Mapper<LongWritable, Text, Text, Text> {
 			tokens=line.split(",");
 			context.write(new Text(customermap.get(tokens[1])),new Text(line));
 		}
-		
-
 	}
-
 }
