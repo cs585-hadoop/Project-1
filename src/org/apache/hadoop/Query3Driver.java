@@ -12,8 +12,6 @@ import org.apache.hadoop.mapreduce.Reducer;
 import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 
-import query.Query3Mapper;
-import query.Query3Reducer;
 
 public class Query3Driver {
 

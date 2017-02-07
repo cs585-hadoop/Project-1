@@ -26,7 +26,7 @@ public class Query2 {
 			while (itr.hasMoreTokens()) {
 				String[] s = itr.nextToken().split(",");
 				cusID.set(s[1]);
-				record.set(s[2] + ",1");
+				record.set("1," + s[2]);
 				context.write(cusID, record);
 			}
 		}
@@ -39,9 +39,9 @@ public class Query2 {
 			float total = 0;
 			int count = 0;
 			String[] s = value.toString().split(",");
-			total += Float.parseFloat(s[0]);
-			count += Integer.parseInt(s[1]);
-			result.set(total + "," + count);
+			count += Integer.parseInt(s[0]);
+			total += Float.parseFloat(s[1]);
+			result.set(count + "," + total);
 			context.write(key, result);
 		}
 	}
@@ -55,10 +55,10 @@ public class Query2 {
 			String[] s = null;
 			for (Text val : values) {
 				s = val.toString().split(",");
-				total += Float.parseFloat(s[0]);
-				count += Integer.parseInt(s[1]);
+				count += Integer.parseInt(s[0]);
+				total += Float.parseFloat(s[1]);
 			}
-			result.set(total + "," + count);
+			result.set(count + "," + total);
 			context.write(key, result);
 		}
 	}
