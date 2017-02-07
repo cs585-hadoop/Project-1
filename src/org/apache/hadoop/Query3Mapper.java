@@ -25,15 +25,15 @@ public class Query3Mapper extends Mapper<LongWritable, Text, Text, Text> {
 	//getting the path of the file to be loaded to hashmap
 	@Override
 	protected void setup(Context context) throws IOException,InterruptedException,FileNotFoundException{
-		Path[] cacheFilesLocal = DistributedCache.getLocalCacheFiles(context
-				.getConfiguration());
-		
+		Path[] cacheFilesLocal = DistributedCache.getLocalCacheFiles(context.getConfiguration());
+		System.err.println(cacheFilesLocal);
 		for (Path eachPath : cacheFilesLocal) {
-			if (eachPath.getName().toString().trim().equals("customer")) {
+			
+			if (eachPath.getName().toString().trim().equals("customer.csv")) {
 				loadCustomerHashMap(eachPath, context);
 			}
 		}
-	}
+	}	
 	
 	private void loadCustomerHashMap(Path p, Context context) throws IOException,FileNotFoundException{
 		reader=new BufferedReader(new FileReader(p.toString()));
