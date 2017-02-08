@@ -12,5 +12,9 @@ ct = JOIN cus BY ID, num BY $0 USING 'replicated';
 
 result = FOREACH ct GENERATE $1, $6;
 
-STORE result INTO 'pigresult' USING PigStorage(',');
+resultorder = ORDER result BY $1;
+
+final = LIMIT resultorder 1;
+
+STORE final INTO 'pigresult' USING PigStorage(',');
 
