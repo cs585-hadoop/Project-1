@@ -70,6 +70,7 @@ public class Query2 {
 			System.err.println("Usage: Query-2 <HDFS input file> <HDFS output file>");
 			System.exit(2);
 		}
+		conf.set("mapred.textoutputformat.separator", ",");
 		Job job = new Job(conf, "Query-2");
 		job.setJarByClass(Query2.class);
 		job.setMapperClass(Q2Mapper.class);

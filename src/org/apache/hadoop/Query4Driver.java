@@ -19,7 +19,7 @@ public class Query4Driver {
 			System.err.println("Usage: Query-4 <HDFS input file> <HDFS output file> <HDFS cache file>");
 			System.exit(2);
 		}
-		
+		conf.set("mapred.textoutputformat.separator", ",");
 		// TODO:add cache files
 		DistributedCache.addCacheFile(new Path(args[2]).toUri(), conf);
 		
