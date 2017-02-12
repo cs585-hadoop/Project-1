@@ -7,7 +7,7 @@ temp_result = FOREACH cc_group GENERATE group, COUNT(cus.ID);
 
 result = FILTER temp_result BY $1 > 5000 OR $1 < 2000;
 
-STORE result INTO 'pigresult' USING PigStorage(',');
+STORE result INTO 'pigresult3' USING PigStorage(',');
 
 
 
